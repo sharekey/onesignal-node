@@ -2,6 +2,7 @@ import { createHmac } from 'crypto';
 import axios, { AxiosRequestConfig } from 'axios';
 
 import { HTTPError } from './errors';
+import { ClientResponse } from './types';
 
 /**
  * Remove trailing slash from given string,
@@ -64,7 +65,7 @@ const anyToString = function convertAnyToString(inputObj: any): string {
  *
  * @return {Promise<request.ResponseAsJSON>}
  */
-const makeRequest = function makeHTTPRequest(options: AxiosRequestConfig): Promise<any> {
+const makeRequest = function makeHTTPRequest(options: AxiosRequestConfig): Promise<ClientResponse> {
   return new Promise((resolve, reject) => {
     axios({ ...options, validateStatus: () => true }).then(res => {
       if (res.status - 299 > 0) {
@@ -74,6 +75,7 @@ const makeRequest = function makeHTTPRequest(options: AxiosRequestConfig): Promi
       resolve({
         statusCode: res.status,
         body: res.data,
+        headers: res.headers,
       });
     });
   });
