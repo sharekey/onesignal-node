@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "lint": "./node_modules/.bin/eslint src test --ext .js,.ts",
-    "build": "./node_modules/.bin/tsc",
+    "build": "./node_modules/.bin/tsc -b",
     "test": "./node_modules/.bin/mocha -r ts-node/register 'test/unit/**/*.spec.ts'",
     "test-integration": "./node_modules/.bin/mocha -r ts-node/register 'test/integration/**/*.spec.ts'",
     "coverage": "./node_modules/.bin/nyc --reporter=lcov npm run test",
