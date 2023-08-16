@@ -1,7 +1,8 @@
 import { createHmac } from 'crypto';
-import * as request from 'request';
+import axios, { AxiosRequestConfig } from 'axios';
 
 import { HTTPError } from './errors';
+import { ClientResponse } from './types';
 
 /**
  * Remove trailing slash from given string,
@@ -64,19 +65,18 @@ const anyToString = function convertAnyToString(inputObj: any): string {
  *
  * @return {Promise<request.ResponseAsJSON>}
  */
-const makeRequest = function makeHTTPRequest(options: request.Options): Promise<request.ResponseAsJSON> {
+const makeRequest = function makeHTTPRequest(options: AxiosRequestConfig): Promise<ClientResponse> {
   return new Promise((resolve, reject) => {
-    request(options, (err, httpResponse) => {
-      if (err) {
-        return reject(err);
+    axios({ ...options, validateStatus: () => true }).then(res => {
+      if (res.status - 299 > 0) {
+        reject(new HTTPError(res.status, anyToString(res.data)));
       }
 
-      // Check if status code is 2xx.
-      if (httpResponse.statusCode - 299 > 0) {
-        return reject(new HTTPError(httpResponse.statusCode, anyToString(httpResponse.body)));
-      }
-
-      return resolve(httpResponse.toJSON());
+      resolve({
+        statusCode: res.status,
+        body: res.data,
+        headers: res.headers,
+      });
     });
   });
 };
@@ -92,23 +92,24 @@ const makeRequest = function makeHTTPRequest(options: request.Options): Promise<
  * @return {Promise<request.ResponseAsJSON>}
  */
 export const basicAuthRequest = function basicAuthHTTPRequest(
-  uri: string,
+  url: string,
   method: string,
   authKey: string,
   body?: {},
-): Promise<request.ResponseAsJSON> {
-  const options: request.Options = {
-    uri,
+): Promise<any> {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // @ts-ignore
+  const options: AxiosRequestConfig = {
+    url,
     method,
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
       Authorization: `Basic ${authKey}`,
     },
-    json: true,
   };
 
   if (body) {
-    options.body = body;
+    options.data = body;
   }
 
   return makeRequest(options);

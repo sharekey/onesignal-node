@@ -1,12 +1,12 @@
 {
-  "name": "onesignal-node",
-  "version": "3.4.0",
+  "name": "@sharekey/onesignal-node",
+  "version": "4.0.0",
   "description": "A Node.js Library for OneSignal push notification service",
   "engines": {
     "node": ">=8.13.0"
   },
-  "main": "./lib/index.js",
-  "types": "./lib/index.d.ts",
+  "main": "./lib/src/index.js",
+  "types": "./lib/src/index.d.ts",
   "files": [
     "/lib",
     "LICENSE",
@@ -15,15 +15,16 @@
   ],
   "scripts": {
     "lint": "./node_modules/.bin/eslint src test --ext .js,.ts",
-    "build": "./node_modules/.bin/tsc",
+    "build": "./node_modules/.bin/tsc -b",
     "test": "./node_modules/.bin/mocha -r ts-node/register 'test/unit/**/*.spec.ts'",
     "test-integration": "./node_modules/.bin/mocha -r ts-node/register 'test/integration/**/*.spec.ts'",
     "coverage": "./node_modules/.bin/nyc --reporter=lcov npm run test",
-    "update-codecov": "./node_modules/.bin/codecov"
+    "update-codecov": "./node_modules/.bin/codecov",
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zeyneloz/onesignal-node.git"
+    "url": "git+https://github.com/sharekey/onesignal-node.git"
   },
   "keywords": [
     "onesignal",
@@ -32,7 +33,7 @@
     "signal",
     "notification"
   ],
-  "author": "Zeynel <ozdemir.zynl@gmail.com>",
+  "author": "Sharekey <admin@sharekey.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/zeyneloz/onesignal-node.git/issues"
@@ -72,10 +73,9 @@
     "source-map-support": "^0.5.21",
     "ts-node": "^8.10.2",
     "typedoc": "^0.23.2",
-    "typescript": "^3.9.10"
+    "typescript": "^4.2.4"
   },
   "dependencies": {
-    "request": "^2.88.2",
-    "request-promise": "^4.2.6"
+    "axios": "^1.4.0"
   }
 }
