@@ -1,6 +1,6 @@
 {
   "name": "@sharekey/onesignal-node",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "A Node.js Library for OneSignal push notification service",
   "engines": {
     "node": ">=8.13.0"
